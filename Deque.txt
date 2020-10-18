@@ -1,0 +1,156 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+struct node{
+    int data;
+    node *next,*prev;
+    
+    static node *getNode(int data){
+        node *newNode = (struct node*)malloc(sizeof(struct node));
+        newNode->data = data;
+        newNode->next = newNode->prev = NULL;
+        return newNode;
+    }
+};
+
+class Deque{
+    node *front,*rear;
+    int size;
+    public:
+    Deque(){
+        front = rear = NULL;
+        size = 0;
+    }
+    
+    void insertFront(int data);
+    void insertRear(int data);
+    int deleteFront();
+    int deleteRear();
+    int getFront();
+    int getRear();
+    int Size();
+    int isEmpty();
+    void erase();
+};
+
+
+void Deque::insertRear(int data){
+    node *newNode = node::getNode(data);
+    
+    if(!newNode){
+        cout<<"Overflow";
+    }
+    else{
+        if(front==NULL)
+        rear = front = newNode;
+        else{
+            rear->next = newNode;
+            newNode->prev = rear;
+            rear = newNode;
+        }
+        size++;
+   }
+}
+
+void Deque::insertFront(int data){
+    node *newNode = node::getNode(data);
+    
+    if(!newNode){
+        cout<<"Overflow";
+    }
+    else{
+        if(front==NULL)
+        rear = front = newNode;
+        else{
+            newNode->next = front;
+            front->prev = newNode;
+            front = newNode;
+        }
+        size++;
+    }
+}
+
+int Deque::deleteRear(){
+    if(front==NULL){
+        cout<<"Underflow";
+    }
+    else{
+        node *temp = rear;
+        rear = rear->prev;
+        if(rear==NULL)
+        front = NULL;
+        else
+        rear->next = NULL;
+        free(temp);
+        size--;
+    }
+}
+
+int Deque::deleteFront(){
+    if(front==NULL)
+    cout<<"Underflow";
+    else{
+        node *temp = front;
+        front = front->next;
+        if(front==NULL)
+        rear = NULL;
+        else
+        front->prev = NULL;
+        free(temp);
+        size--;
+    }
+}
+
+int Deque::getRear(){
+    if(front==NULL)
+    return -1;
+    return rear->data;
+}
+
+int Deque::getFront(){
+    if(front==NULL)
+    return -1;
+    return front->data;
+}
+
+int Deque::Size(){
+    return size;
+}
+
+void Deque::erase(){
+    rear = NULL;
+    while(front){
+        node * temp = front;
+        front = front->next;
+        free(temp);
+    }
+    size=0;
+}
+
+int main(){
+    Deque dq;
+    cout<<"Insert element at rear end\n";
+    dq.insertRear(5);
+    
+    cout<<"Insert element at rear end\n";
+    dq.insertRear(10);
+    
+    cout<<"Front and Rear element are : "<<dq.getFront()<<" "<<dq.getRear()<<endl;
+    
+    dq.deleteRear();
+    
+    cout<<"Rear element : "<<dq.getRear()<<endl;
+    
+    cout<<"Inserting element at front\n";
+    dq.insertFront(15);
+    
+    cout<<"Front and rear element : "<<dq.getFront()<<" "<<dq.getRear()<<"\n";
+    
+    cout<<"Number of elements in deque : "<<dq.Size()<<"\n";
+    
+    dq.deleteFront();
+    
+    cout<<"Front and rear element : "<<dq.getFront()<<" "<<dq.getRear()<<"\n";
+    
+    return 0;
+}
